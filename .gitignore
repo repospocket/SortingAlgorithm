@@ -1,0 +1,5 @@
+/__pycache__
+.vscode/
+Sorting_Visualization/Sorting_app/SpeedTest.py
+#Sorting_Visualization/.env
+*.pyc
