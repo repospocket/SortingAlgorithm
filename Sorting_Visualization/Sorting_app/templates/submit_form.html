@@ -24,11 +24,14 @@
     <div id="visualize"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="{% static 'js/visualization.js' %}"></script>
+    <script src="{% static 'js/matter.js' %}"></script>
+    <script src="{% static 'js/matter_visualization.js' %}"></script>
+
+<!-- <script src="{% static 'js/visualization.js' %}"></script> -->
     <script>
         document.getElementById("sort-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent the default form submission
-            
+      
             // Get the form data
             var form = event.target;
             var formData = new FormData(form);
