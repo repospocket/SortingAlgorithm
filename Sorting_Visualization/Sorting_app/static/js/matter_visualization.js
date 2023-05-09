@@ -1,35 +1,85 @@
-function renderMatterVisualization(json) {
-
-// module aliases
+ // module aliases
 var Engine = Matter.Engine,
-    Render = Matter.Render,
-    Runner = Matter.Runner,
-    Bodies = Matter.Bodies,
-    Composite = Matter.Composite;
+Render = Matter.Render,
+Bodies = Matter.Bodies,
+Composite = Matter.Composite;
 
-// create an engine
+ // create an engine
 var engine = Engine.create();
 
 // create a renderer
 var render = Render.create({
     element: document.body,
-    engine: engine
-});
+    engine: engine,
+    options: {  
+        wireframes: true,
+      },
+      label: 'dada'
+        
+    });
 
-// create two boxes and a ground
-var boxA = Bodies.rectangle(400, 200, 80, 80);
-var boxB = Bodies.rectangle(450, 50, 80, 80);
-var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-
-// add all of the bodies to the world
-Composite.add(engine.world, [boxA, boxB, ground]);
-
-// run the renderer
 Render.run(render);
 
-// create runner
-var runner = Runner.create();
+var ground = Bodies.rectangle(400, 610, 810, 60, {
+    isStatic: true,
+    render: {
+      fillStyle: 'pink',
+    }
+  });
+
+Composite.add(engine.world, [ground]);
+
+var bodies = [];
+var constraints = [];
+
+var radius = 30;
+var nodeBody = Bodies.circle(400, 210, radius,
+    {isStatic: true
+    }
+    );
+    nodeBody.label = 'root';
+
+Composite.add(engine.world, [nodeBody]);
+
+
+function renderMatterVisualization(json) {
+    const data = JSON.parse(json);
+    
+    //const rootCircle = createCircle(400, 100, 100, dataStructure.children);
+
+  }
 
 // run the engine
-Runner.run(runner, engine);
-}
+Matter.Runner.run(engine);
+
+function renderTextLabessl(body) {
+    var ctx = render.context;  // Get the rendering context
+    ctx.font = '12px Arial';   // Set the font style
+    ctx.fillStyle = 'black';   // Set the fill color
+  
+    var position = body.position;
+    var label = 'My Circle';  // The text label
+  
+    // Render the text label at the body's position
+    ctx.fillText(label, position.x, position.y);
+  }
+   
+function renderTextLabels() {
+    var ctx = render.context;  // Get the rendering context
+    ctx.font = '12px Arial';   // Set the font style
+    ctx.fillStyle = 'white';   // Set the fill color
+  
+    // Loop through the bodies and render text labels
+    Matter.Composite.allBodies(engine.world).forEach(function(body) {
+      var position = body.position;
+      var label = body.label;  // The text label
+  
+      // Render the text label at the body's position
+      ctx.fillText(label, position.x -10, position.y);
+    });
+  }
+  
+
+  Matter.Events.on(render, 'afterRender', renderTextLabels);
+
+   // renderTextLabessl(nodeBody);

@@ -6,16 +6,16 @@ class Node:
         self.leaves = []
         self.repeated_numbers_number = 0  # for repeated numbers in the list to be sorted
         self.Leaves_length = 0  # length of current self.leaves to not use len()
-        self.x_loc = 0
-        self.y_loc = 0
+        #self.x_loc = 0
+        #self.y_loc = 0
 
 class NodeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Node):
             # Convert Node object to a dictionary
-            return {'data': obj.val, 'loc': [ obj.x_loc, obj.y_loc ] , 'children': obj.leaves}
+            return {'data': obj.val , 'children': obj.leaves}
         return super().default(obj)
-    
+    #, 'loc': [ obj.x_loc, obj.y_loc ]
 class TrieNodeSort:
     def int_to_list(self, num):  # 469 -> [9,6,4]
         numlist = []
@@ -55,8 +55,8 @@ class TrieNodeSort:
                     elif leaf.val > digit:
                         if i == 0:
                             node = Node(digit)
-                            node.x_loc = leaf.x_loc - 1
-                            node.y_loc = leaf.y_loc 
+                            #node.x_loc = leaf.x_loc - 1
+                            #node.y_loc = leaf.y_loc 
 
                             
                             print(digit)
@@ -70,8 +70,8 @@ class TrieNodeSort:
 
                     elif leaf.val < digit:
                         node = Node(digit)
-                        node.x_loc = leaf.x_loc + 1
-                        node.y_loc = leaf.y_loc 
+                        #node.x_loc = leaf.x_loc + 1
+                        #node.y_loc = leaf.y_loc 
 
                         parent.leaves.insert(i + 1, node)
                         json_data.append(node)
