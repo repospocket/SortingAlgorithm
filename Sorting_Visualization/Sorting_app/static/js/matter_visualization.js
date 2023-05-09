@@ -1,3 +1,5 @@
+function renderMatterVisualization(json) {
+
 // module aliases
 var Engine = Matter.Engine,
     Render = Matter.Render,
@@ -30,3 +32,4 @@ var runner = Runner.create();
 
 // run the engine
 Runner.run(runner, engine);
+}
