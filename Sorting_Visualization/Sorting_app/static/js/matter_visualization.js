@@ -1,85 +1,96 @@
- // module aliases
-var Engine = Matter.Engine,
-Render = Matter.Render,
-Bodies = Matter.Bodies,
-Composite = Matter.Composite;
-
- // create an engine
-var engine = Engine.create();
-
-// create a renderer
-var render = Render.create({
-    element: document.body,
-    engine: engine,
-    options: {  
-        wireframes: true,
-      },
-      label: 'dada'
-        
-    });
-
-Render.run(render);
-
-var ground = Bodies.rectangle(400, 610, 810, 60, {
-    isStatic: true,
-    render: {
-      fillStyle: 'pink',
-    }
-  });
-
-Composite.add(engine.world, [ground]);
-
-var bodies = [];
-var constraints = [];
+var engine = Matter.Engine.create();
+var render = Matter.Render.create({
+  element: document.body,
+  engine: engine,
+  options: {
+    width: 800,
+    height: 600,
+    wireframes: false,
+    background: 'skyblue',
+      
+  }
+});
 
 var radius = 30;
-var nodeBody = Bodies.circle(400, 210, radius,
-    {isStatic: true
-    }
-    );
-    nodeBody.label = 'root';
+var rootX = 400;
+var rootY = 210;
 
-Composite.add(engine.world, [nodeBody]);
+var rootCircle = null; // Declare rootCircle variable
 
-
-function renderMatterVisualization(json) {
-    const data = JSON.parse(json);
-    
-    //const rootCircle = createCircle(400, 100, 100, dataStructure.children);
-
-  }
-
-// run the engine
 Matter.Runner.run(engine);
+Matter.Render.run(render);
 
-function renderTextLabessl(body) {
-    var ctx = render.context;  // Get the rendering context
-    ctx.font = '12px Arial';   // Set the font style
-    ctx.fillStyle = 'black';   // Set the fill color
+function renderTextLabels(render) {
+    var ctx = render.context;
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
   
-    var position = body.position;
-    var label = 'My Circle';  // The text label
+    Matter.Composite.allBodies(render.engine.world).forEach(function (body) {
+      if (body.label) {
+        var position = body.position;
+        var label = body.label ;
   
-    // Render the text label at the body's position
-    ctx.fillText(label, position.x, position.y);
-  }
-   
-function renderTextLabels() {
-    var ctx = render.context;  // Get the rendering context
-    ctx.font = '12px Arial';   // Set the font style
-    ctx.fillStyle = 'white';   // Set the fill color
+        // Update the text position relative to the body's position
+        var textX = position.x - 3;
+        var textY = position.y + 3;
   
-    // Loop through the bodies and render text labels
-    Matter.Composite.allBodies(engine.world).forEach(function(body) {
-      var position = body.position;
-      var label = body.label;  // The text label
+        // Center the text horizontally
+        var textWidth = ctx.measureText(label).width;
+        textX -= textWidth / 2;
   
-      // Render the text label at the body's position
-      ctx.fillText(label, position.x -10, position.y);
+        // Render the text label at the updated position
+        ctx.fillText(label, textX, textY);
+      }
     });
   }
+
+function renderNodes(data) {
+
+    function createCircle(x, y, isStatic) {
+      var circle = Matter.Bodies.circle(x, y, radius, { isStatic: isStatic });
+      Matter.World.add(engine.world, [circle]);
   
+      if (!isStatic) {
+        
+        Matter.Events.on(render, 'afterRender', function () {
+          renderTextLabels(render);
+        });
 
-  Matter.Events.on(render, 'afterRender', renderTextLabels);
-
-   // renderTextLabessl(nodeBody);
+      }
+      return circle;
+    }
+  
+    rootCircle = createCircle(rootX, rootY, true); // Assign value to rootCircle
+    rootCircle.label = '0';
+  
+    function createChildCircles( parent, children) {
+      var angleStep = Math.PI * 2 / children.length;
+      var distance = 100;
+  
+      children.forEach(function (child, index) {
+        var angle = index * angleStep;
+        var childX = parent.position.x + Math.cos(angle) * distance;
+        var childY = parent.position.y + Math.sin(angle) * distance;
+        var childCircle = createCircle(childX, childY, false);
+        childCircle.label = child.data || "0";
+  
+        Matter.World.add(engine.world, [
+          Matter.Constraint.create({
+            bodyA: parent,
+            pointA: { x: 0, y: 0 },
+            bodyB: childCircle,
+            pointB: { x: 0, y: 0 },
+            stiffness: 1,
+            length: distance
+          })
+        ]);
+  
+        createChildCircles( childCircle, child.children);
+      });
+    }
+  
+    createChildCircles( rootCircle, data.children);
+  
+    
+  }
+  
