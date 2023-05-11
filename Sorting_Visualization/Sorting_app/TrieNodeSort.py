@@ -13,7 +13,7 @@ class NodeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Node):
             # Convert Node object to a dictionary
-            return {'digit': obj.val , 'children': obj.leaves}
+            return {'data': obj.val , 'children': obj.leaves}
         return super().default(obj)
     #, 'loc': [ obj.x_loc, obj.y_loc ]
 class TrieNodeSort:

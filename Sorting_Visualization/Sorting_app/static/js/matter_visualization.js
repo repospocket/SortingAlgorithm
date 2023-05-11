@@ -56,7 +56,7 @@ function renderNodes(data) {
 
     function createCircle(x, y, isStatic) {
       var circle = Matter.Bodies.circle(x, y, radius, { isStatic: isStatic });
-
+      Matter.World.add(engine.world, [circle]);
   
       if (!isStatic) {
         
@@ -106,7 +106,7 @@ function renderNodes(data) {
         var childX = parent.position.x + Math.cos(angle) * distance;
         var childY = parent.position.y + Math.sin(angle) * distance;
         var childCircle = createCircle(childX, childY, false);
-        childCircle.label = child.digit || "0";
+        childCircle.label = child.data || "0";
   
         Matter.World.add(engine.world, [
           Matter.Constraint.create({
