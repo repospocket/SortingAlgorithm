@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <title>Sorting Algorithm Visualizer</title>
     <style>
         #visualize svg {
@@ -24,10 +25,8 @@
     <div id="visualize"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="{% static 'js/matter.js' %}"></script>
-    <script src="{% static 'js/matter_visualization.js' %}"></script>
-
-<!-- <script src="{% static 'js/visualization.js' %}"></script> -->
+    <script src="{% static '/matter.js' %}"></script>
+    <script src="{% static '/matter_visualization.js' %}"></script>
     <script>
         document.getElementById("sort-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent the default form submission
@@ -35,7 +34,7 @@
             // Get the form data
             var form = event.target;
             var formData = new FormData(form);
-    
+
             // Send an AJAX request to the server
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "{% url 'submit_form' %}");
@@ -48,16 +47,11 @@
                     var sortedlist = parsedResponse[1];
                     // Update the content on the page using the response data
                     document.getElementById("result-container-list").innerHTML = sortedlist;   
-                    // console.log(response[1])                 
-                    document.getElementById("result-container-json").innerHTML = data;                    
-                    //visualize_sort(data)
-                    //renderVisualization(data);
-                    //renderMatterVisualization(data);
+                    document.getElementById("result-container-json").innerHTML = data;       
                     const root = JSON.parse(data);
                     renderNodes(root);
-
+        
                     console.log("Nice")
-                  
                 } else {
                     // Handle the error response
                     console.error("Request failed with status", xhr.status);

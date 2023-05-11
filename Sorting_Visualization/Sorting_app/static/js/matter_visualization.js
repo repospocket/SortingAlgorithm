@@ -6,14 +6,22 @@ var render = Matter.Render.create({
     width: 800,
     height: 600,
     wireframes: false,
-    background: 'skyblue',
-      
+    background: 'skyblue',  
   }
 });
 
 var radius = 30;
 var rootX = 400;
 var rootY = 210;
+
+var mouse = Matter.Mouse.create(render.canvas);
+var mouseConstraint = Matter.MouseConstraint.create(engine, {
+  mouse: mouse,
+  constraint: {
+    stiffness: 1
+  }
+
+});
 
 var rootCircle = null; // Declare rootCircle variable
 
@@ -48,7 +56,7 @@ function renderNodes(data) {
 
     function createCircle(x, y, isStatic) {
       var circle = Matter.Bodies.circle(x, y, radius, { isStatic: isStatic });
-      Matter.World.add(engine.world, [circle]);
+
   
       if (!isStatic) {
         
@@ -56,6 +64,32 @@ function renderNodes(data) {
           renderTextLabels(render);
         });
 
+        render.canvas.addEventListener("mousedown", function(event) {
+          if (event.target === render.canvas) {
+            var mousePosition = mouse.position;
+            if (Matter.Bounds.contains(circle.bounds, mousePosition)) {
+              mouseConstraint.body = circle;
+              Matter.Body.setStatic(circle, true);
+            }
+          }
+        });
+        
+        render.canvas.addEventListener("mousemove", function(event) {
+          if (mouseConstraint.body === circle) {
+            var mousePosition = mouse.position;
+            Matter.Body.setPosition(circle, mousePosition);
+          }
+        });
+        
+        render.canvas.addEventListener("mouseup", function(event) {
+          mouseConstraint.body = null;
+          Matter.Body.setStatic(circle, false);
+        });
+        Matter.World.add(engine.world, [circle, mouseConstraint]);
+        
+
+      }else{
+        Matter.World.add(engine.world, [circle]);
       }
       return circle;
     }
@@ -72,7 +106,7 @@ function renderNodes(data) {
         var childX = parent.position.x + Math.cos(angle) * distance;
         var childY = parent.position.y + Math.sin(angle) * distance;
         var childCircle = createCircle(childX, childY, false);
-        childCircle.label = child.data || "0";
+        childCircle.label = child.digit || "0";
   
         Matter.World.add(engine.world, [
           Matter.Constraint.create({
