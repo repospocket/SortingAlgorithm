@@ -2,6 +2,7 @@
 An approach on sorting integers implemented it in two different data structures, trie nodes and list of lists.  
 Time complexity comparison of the two data structures using an external library.
 
+(click on the gif below to play it)
 ![Animated GIF](./screenshots/sorting.gif)
 
 Both algorithms implement a custom radix sort, which sorts integers by sorting them digit by digit, starting from the most significant digit. The main difference between the two implementations is the data structure used to store the digits of the integers during the sorting process.  
