@@ -19,6 +19,13 @@ var mouseConstraint = Matter.MouseConstraint.create(engine, {
 Matter.Runner.run(engine);
 Matter.Render.run(render);
 
+function renderArray(arr) {
+  var renderedArray = arr.map(function (item) {
+      return Array.isArray(item) ? renderArray(item) : item;
+  });
+  return "[" + renderedArray.join(", ") + "]";
+}
+
 function renderTextLabels(render) {
   var ctx = render.context;
   ctx.font = '20px Arial';
@@ -124,5 +131,4 @@ function renderNodes(data) {
   }
 
   createChildCircles(rootCircle, data.children);
-
 }

@@ -26,7 +26,10 @@
     </form>
 
     <div id="result-container-list"></div>
+    <div class="or" style="display: none;">or</div>
     <div id="result-container-json"></div>
+    <div class="or" style="display: none;">or</div>
+    <div id="result-container-listoLists"></div>
     <div id="render-container"></div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -50,9 +53,18 @@
                     var parsedResponse = JSON.parse(xhr.responseText);
                     var data = parsedResponse[0];
                     var sortedlist = parsedResponse[1];
+                    var sortedlistoflists = parsedResponse[2];
+
                     // Update the content on the page using the response data
                     document.getElementById("result-container-list").innerHTML = sortedlist;
                     document.getElementById("result-container-json").innerHTML = data;
+                    document.getElementById("result-container-listoLists").innerHTML = renderArray(sortedlistoflists);
+
+                    var elements = document.getElementsByClassName("or");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.display = "block";
+                    }
+
                     const root = JSON.parse(data);
                     renderNodes(root);
 

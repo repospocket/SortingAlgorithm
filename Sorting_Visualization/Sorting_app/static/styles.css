@@ -2,7 +2,9 @@
 h1,
 #sort-form,
 #result-container-list,
-#result-container-json {
+#result-container-json,
+#result-container-listoLists,
+.or {
   margin: 0 auto;
   text-align: center;
 }
@@ -20,9 +22,14 @@ h1 {
 
 #sort-form,
 #result-container-list,
-#result-container-json {
+#result-container-json,
+#result-container-listoLists {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 10px;
+}
+
+.or {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 body {

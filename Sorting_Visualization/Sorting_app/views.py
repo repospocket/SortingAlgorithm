@@ -18,12 +18,15 @@ def submit_form_view(request):
             input_list = [int(x) for x in data.split(',')]
 
             list_sorter = TrieNodeSort()
-            [fisrtnode,sortedlist] = list_sorter.sort_list(input_list)
+            [fisrtnode, sortedlist] = list_sorter.sort_list(input_list)
+
+            list_sorter2 = ListofListsSort()
+            sortedlistoflists = list_sorter2.sort_list(input_list)
 
             # Pass the sorted list or any other data to the template
             json_data = json.dumps(fisrtnode, cls=NodeEncoder)
 
-            return JsonResponse([json_data,sortedlist], safe=False)
+            return JsonResponse([json_data, sortedlist, sortedlistoflists], safe=False)
         else:
             # Form is not valid, return a 404 error response
             return HttpResponseNotFound()
