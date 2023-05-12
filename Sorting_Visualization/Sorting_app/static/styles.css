@@ -1,0 +1,30 @@
+/* Center the elements */
+h1,
+#sort-form,
+#result-container-list,
+#result-container-json {
+  margin: 0 auto;
+  text-align: center;
+}
+
+#render-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+h1 {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
+
+#sort-form,
+#result-container-list,
+#result-container-json {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+body {
+  font-family: Calibri, Arial, sans-serif;
+}
